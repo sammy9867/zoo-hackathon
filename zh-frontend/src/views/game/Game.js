@@ -6,8 +6,8 @@ import { formatRelative } from "date-fns";
 import './Game.css';
 
 const containerStyle = {
-    height: "100vh",
-    width: "100vw",
+    width: '100vw', 
+    height: '93.5vh'
 };
 
 const center = {
@@ -65,7 +65,7 @@ export const Game = () => {
 
 
     return (
-        <div className="map">
+        <section className="map">
            <LoadScript
             googleMapsApiKey={GOOGLE_MAPS_API_KEY}
             >
@@ -101,8 +101,6 @@ export const Game = () => {
                     ) : null }
                 </GoogleMap> }
             </LoadScript>
-            
-
-        </div>
+        </section>
     );
 }

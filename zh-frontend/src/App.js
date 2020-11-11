@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,6 +6,7 @@ import {
 } from 'react-router-dom';
 import { Header} from './components';
 import { Home, Game, Error } from './views';
+import './App.css';
 
 export const App = () => {
   return (

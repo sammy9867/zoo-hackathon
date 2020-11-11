@@ -6,7 +6,7 @@ import './Header.css';
 export const Header = () => {
     return (
         <header className="header">
-             <nav className="nav"> 
+             <nav className="nav">
                 <span className="logo">
                     <Link to="/">
                         <Logo/>

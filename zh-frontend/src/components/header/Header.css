@@ -1,22 +1,18 @@
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap');
-
 header {
     display: flex;
-    width: 100%;
-    height: 44px;
-    position: absolute;
-    top: 0;
-    padding: 15px;  
+    width: 100vw;
+    height: 60px;
     background-color: #242526;
     border-bottom: solid 1px #3A3B3C;
 }
 
 .logo {
-    position: absolute;
-    color: white;
-    flex: 1;
-    top: 20%;
-    left: 5%;
+    display: flex;
+    align-items: center;
+    justify-self: start;
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: 3%;
 }
 
 .nav {
@@ -28,29 +24,23 @@ header {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    list-style-type: none; 
-    margin: 0;
+    list-style: none;
     width: 100%;
-    height: 100%;
+    height: auto;
 }
 
 .login {
-    margin-right: 5%;
     margin-left: auto;
-    
+    margin-right: 3%;
 }
 
 .login-button {
-    width: 118px;
-    height: 40px;
+    width: 6em;
+    height: 35px;
+    border-radius: 15px;
     border: none;
+    outline: none;
     background-color: white;
-    outline:none;
-    border-radius: 7px;
     font-weight: bold;
+    cursor: pointer;
 }
-
-.login a {
-    text-decoration: none;
-}
-
