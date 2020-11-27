@@ -7,8 +7,10 @@ import './Game.css';
 
 const containerStyle = {
     width: '100vw', 
-    height: '93.5vh'
+    maxWidth: '100%',
+    height: '100%'
 };
+
 
 const center = {
     lat:-3.2836539123767188,
@@ -66,10 +68,12 @@ export const Game = () => {
 
     return (
         <section className="map">
+
+        <div className="container">
            <LoadScript
             googleMapsApiKey={GOOGLE_MAPS_API_KEY}
             >
-               {<GoogleMap
+                {<GoogleMap
                     mapContainerStyle={containerStyle}
                     zoom={60}
                     center={center}
@@ -101,6 +105,7 @@ export const Game = () => {
                     ) : null }
                 </GoogleMap> }
             </LoadScript>
+            </div>
         </section>
     );
 }

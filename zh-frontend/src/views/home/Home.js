@@ -4,12 +4,13 @@ import { Monitor, Report, Donate, Tree } from '../../components';
 import "./Home.css";
 
 export const Home = () => {
+
     return (
         <div className="home">
-            <section className="first">
+            <section className="first" style={{backgroundImage: 'url(' + process.env.PUBLIC_URL + '/images/forest3.jpg)' }}> 
                 <article className="content">
-                    <h2>Save a forest,</h2>
-                    <h2>Get a reward.</h2>
+                    <h2>Save forests,</h2>
+                    <h2>Get rewarded</h2>
                     <Link to="/game">
                          <button className="start-game">BEGIN</button>
                     </Link>
@@ -38,10 +39,7 @@ export const Home = () => {
             </section>
 
             <section className="second">
-                <article className="tree-image">
-                    <Tree />
-                </article>
-
+                <img src={process.env.PUBLIC_URL + '/images/forest-spy.png'} />
                  <article className="mission"> 
                     <h2>Our Mission</h2>
                     <p>To report on suspected illegal logging through satellite imagery.</p>
@@ -67,27 +65,6 @@ export const Home = () => {
                     </ul>
                 </article>
             </section>
-
-            {/* <div className="tutorial"> 
-                {/* <image src="https://img.techpowerup.org/201107/tutorial.png" alt="tutorial"/> 
-                <ul className="tutorial-ul">
-                    <h2>How it works?</h2>
-                    <li>
-                       <p>1. You will spawn at a random forest location with a birds-eye view.</p> 
-                    </li>
-                    <li>
-                       <p>2. Navigate through the satellite map, looking for patches of missing trees.</p> 
-                    </li>
-                    <li>
-                       <p>3. Once you find any evidence of illegal logging, report it.</p> 
-                    </li>
-                    <li>
-                       <p>4. You'll earn points which will be converted into donations for your chosen charity.</p> 
-                    </li>
-                </ul>
-                <div>
-                </div>
-            </div> */}
         </div>
     );
 }

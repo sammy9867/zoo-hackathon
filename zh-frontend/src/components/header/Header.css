@@ -2,45 +2,60 @@ header {
     display: flex;
     width: 100vw;
     height: 60px;
-    background-color: #242526;
-    border-bottom: solid 1px #3A3B3C;
+    max-width: 100%;
+    background-color: black;
+    margin: 0px;
+    padding: 0px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    --link-color: white;
 }
 
 .logo {
+    position: relative;
+    left: 10%;
+    cursor: pointer;
+    text-decoration: none;   
+}
+
+
+/** Navbar **/
+.navbar {
+    width: 100%;
+    height: 100%;
+    margin-left: 10%;
+    margin-right: 5%;
+}
+
+.navbar ul {
     display: flex;
-    align-items: center;
-    justify-self: start;
+    flex-direction: row-reverse;
+    width: 100%;
+    height: 100%;
+    list-style-type: none;
+}
+
+.navbar li {
+    width: 5em;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+}
+
+.navbar li a {
+    color: var(--link-color);
     text-decoration: none;
-    cursor: pointer;
-    margin-left: 3%;
 }
 
-.nav {
+.navbar li a:hover {
+    color: grey;
+}
+
+/** Utilities **/
+.flex {
     display: flex;
-    width: 100%;
-}
-
-.nav-items {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    list-style: none;
-    width: 100%;
-    height: auto;
-}
-
-.login {
-    margin-left: auto;
-    margin-right: 3%;
-}
-
-.login-button {
-    width: 6em;
-    height: 35px;
-    border-radius: 15px;
-    border: none;
-    outline: none;
-    background-color: white;
-    font-weight: bold;
-    cursor: pointer;
+    justify-content: center;
+    align-items: center;    
 }

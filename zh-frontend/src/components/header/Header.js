@@ -6,17 +6,24 @@ import './Header.css';
 export const Header = () => {
     return (
         <header className="header">
-             <nav className="nav">
-                <span className="logo">
-                    <Link to="/">
-                        <Logo/>
-                    </Link>
-                </span>
+            <span className="logo flex">
+                <Link to="/">
+                    <Logo />
+                </Link>
+            </span>
+            <nav className="navbar">
                 <ul className="nav-items">
-                    <li className="login">
-                        <button className="login-button">LOGIN</button>
+                    <li className="flex">
+                        <Link to="/login">
+                            Login
+                        </Link>
                     </li>
-                </ul> 
+                    <li className="flex">
+                        <Link to="/donate">
+                            Donate
+                        </Link>
+                    </li>
+                </ul>
              </nav>
         </header>
     );
