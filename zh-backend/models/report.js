@@ -1,12 +1,13 @@
 const mongoose = require('mongoose')
 
-const reportSchema = new mongoose.Schema({
-    certainty: Number,
-    isLowCertainty: Number,
-    lat: String,
-    lng: String,
-    time: String, 
+const ReportSchema = new mongoose.Schema({
+    userId: String,
+    forestId: String,
+    location: {
+        latitude: Number,
+        longitude: Number,
+    },
+    certainty: Number
+}, { timestamps: true });
 
-})
-
-module.exports = mongoose.model('report', reportSchema)
+module.exports = mongoose.model('report', ReportSchema);
