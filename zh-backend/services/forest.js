@@ -20,21 +20,38 @@ class ForestService {
         }
     }
 
-    async addForest (forestBody) {
-        const forest = new Forest({
-            name: forestBody.name,
-            city: forestBody.city,
-            country: forestBody.country
-        });
+    async getRandomLocationByForestId (id) {
+        const forest = await this.getForestById(id);
+        const bounds = this.getPolygonBoundingBox(forest.coordinates);
 
-        try {
-            const savedForest = await forest.save();
-            return savedForest;
-        } catch (err) {
-            return err;
-        }
+        const x_min = bounds[0][0];
+        const y_min = bounds[0][1];
+        const x_max = bounds[1][0];
+        const y_max = bounds[1][1];
+
+        const latitude = y_min + (Math.random() * (y_max - y_min));
+        const longitude = x_min + (Math.random() * (x_max - x_min));
+
+        return { latitude, longitude };
     }
 
+    getPolygonBoundingBox(coordinates) {
+
+        let bounds = [[], []];
+
+        for (let i = 0; i < coordinates.length; i++) {
+
+            const longitude = coordinates[i][0];
+            const latitude = coordinates[i][1];
+    
+            bounds[0][0] = bounds[0][0] < longitude ? bounds[0][0] : longitude;
+            bounds[1][0] = bounds[1][0] > longitude ? bounds[1][0] : longitude;
+            bounds[0][1] = bounds[0][1] < latitude ? bounds[0][1] : latitude;
+            bounds[1][1] = bounds[1][1] > latitude ? bounds[1][1] : latitude;
+        }
+
+        return bounds;
+    }
 }
 
 module.exports = ForestService;

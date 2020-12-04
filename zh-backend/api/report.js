@@ -11,8 +11,7 @@ router.get('/', async (req, res) => {
     } catch(err) {
         res.status(500).send(err);
     }
-})
-
+});
 
 router.get('/:reportId', async (req, res) => { 
     try {
@@ -21,7 +20,7 @@ router.get('/:reportId', async (req, res) => {
     } catch(err) {
         res.status(500).send(err);
     }
-})
+});
 
 router.post('/', async (req, res) => {
     try {
@@ -30,6 +29,6 @@ router.post('/', async (req, res) => {
     } catch(err) {
         res.status(500).send(err);
     }
-})
+});
 
 module.exports = router;

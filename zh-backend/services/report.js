@@ -38,7 +38,6 @@ class ReportService {
             return err;
         }
     }
-
 }
 
 module.exports = ReportService;

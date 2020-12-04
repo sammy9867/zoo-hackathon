@@ -11,8 +11,7 @@ router.get('/', async (req, res) => {
     } catch(err) {
         res.status(500).send(err);
     }
-})
-
+});
 
 router.get('/:forestId', async (req, res) => { 
     try {
@@ -21,15 +20,15 @@ router.get('/:forestId', async (req, res) => {
     } catch(err) {
         res.status(500).send(err);
     }
-})
+});
 
-router.post('/', async (req, res) => {
+router.get('/:forestId/random-location', async (req, res) => {
     try {
-        const forest = await ForestServiceInstance.addForest(req.body);
-        res.json(forest);
+        const location = await ForestServiceInstance.getRandomLocationByForestId(req.params.forestId);
+        res.json(location);
     } catch(err) {
         res.status(500).send(err);
     }
-})
+});
 
 module.exports = router;
