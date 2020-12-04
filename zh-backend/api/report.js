@@ -1,5 +1,6 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
+const auth = require('../config/auth');
 
 const ReportService = require('../services/report');
 const ReportServiceInstance = new ReportService();
@@ -22,7 +23,7 @@ router.get('/:reportId', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     try {
         const report = await ReportServiceInstance.addReport(req.body);
         res.json(report);

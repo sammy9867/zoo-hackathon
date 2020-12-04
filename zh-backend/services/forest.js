@@ -1,4 +1,4 @@
-const Forest = require("../models/forest");
+const Forest = require('../models/forest');
 
 class ForestService {
 
@@ -36,7 +36,6 @@ class ForestService {
     }
 
     getPolygonBoundingBox(coordinates) {
-
         let bounds = [[], []];
 
         for (let i = 0; i < coordinates.length; i++) {

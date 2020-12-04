@@ -1,4 +1,6 @@
-const Report = require("../models/report");
+const Report = require('../models/report');
+const User = require('../models/user');
+const Forest = require('../models/forest');
 
 class ReportService {
 
@@ -21,6 +23,12 @@ class ReportService {
     }
 
     async addReport (reportBody) {
+        let errors;
+        errors = await this.validateReport(reportBody);
+        if(errors.length > 0) {
+            return { error: { code: 400, details: errors }};
+        }
+
         const report = new Report({
             userId: reportBody.userId,
             forestId: reportBody.forestId,
@@ -37,6 +45,34 @@ class ReportService {
         } catch (err) {
             return err;
         }
+    }
+
+    async validateReport (reportBody) {
+        const { userId, forestId, location, certainty } = reportBody;
+
+        let errors = [];
+
+        if (!userId || !forestId || !location.latitude || !location.longitude || !certainty) {
+            errors.push({ message: "Enter all fields" });
+        }
+
+        try {
+            await User.findById(userId);
+        } catch (err) {
+            errors.push({ message: "User not found" });
+        }
+      
+        try {
+            await Forest.findById(forestId);
+        } catch (err) {
+            errors.push({ message: "Forest not found" });
+        }
+
+        if(certainty < 0 || certainty > 100) {
+            errors.push({ message: "Certainty should be between 1 and 100"});
+        }
+
+        return errors;
     }
 }
 

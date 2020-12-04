@@ -19,9 +19,11 @@ mongoose
 
 
 /** API endpoints **/
+const user = require("./api/user");
 const forest = require("./api/forest");
 const report = require("./api/report");
 
+app.use("/users", user);
 app.use("/forests", forest);
 app.use("/reports", report);
 
