@@ -1,7 +1,7 @@
 const User = require('../models/user');
+const TokenUser = require('../models/token-user');
 const NonProfit = require('../models/non-profit');
 const bcrypt = require('bcryptjs');
-const nonProfit = require('../models/non-profit');
 
 class UserValidation {
 
@@ -65,8 +65,44 @@ class UserValidation {
         return true;
     }
 
-    async donationValidation(userId, donateBody) {
+    async isAuthenticated (accessToken) {
+        try {
+            const token = await TokenUser.findOne({ accessToken });
+            if (!(token instanceof TokenUser)) {
+                throw token;
+            }
+            return token;
+        } catch (err) {
+            return  { message: "User is not authenticated" };
+        }
+    }
 
+    async saveAuthData (userId, accessToken) {
+        const tokenUser = new TokenUser({
+            userId,
+            accessToken
+        });
+
+        try {
+            const token = await tokenUser.save();
+            if(!token) {
+                throw token;
+            }
+            return token.accessToken;
+        } catch (err) {
+            return  { error: { message: "Error while saving token" }};
+        }
+    }
+
+    async deleteAuthData (userId) {
+        try {
+            await TokenUser.findOneAndDelete({ userId });
+        } catch (err) {
+            return  { error: { message: "Error while deleting token" }};
+        }
+    }
+
+    async donationValidation (accessToken, userId, donateBody) {
         let user;
         try {
             user = await User.findById(userId);
@@ -75,6 +111,15 @@ class UserValidation {
             }
         } catch (err) {
             return  { error: { message: "User not found" }};
+        }
+
+        try {
+            const token = await this.isAuthenticated(accessToken);
+            if (!(token instanceof TokenUser)) {
+                throw token;
+            }
+        } catch (err) {
+            return { error: err };
         }
 
         const { nonProfitId, donations } = donateBody;

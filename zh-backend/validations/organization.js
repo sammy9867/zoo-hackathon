@@ -1,4 +1,5 @@
 const Organization = require('../models/organization');
+const TokenOrg = require('../models/token-org');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 
@@ -59,7 +60,45 @@ class OrganizationValidation {
         return true;
     }
 
-    async validateRewardAndGetUser (organizationId, rewardBody) {
+    async isAuthenticated (accessToken) {
+        try {
+            const token = await TokenOrg.findOne({ accessToken });
+            if (!(token instanceof TokenOrg)) {
+                throw token;
+            }
+            return token;
+        } catch (err) {
+            return  { error: { message: "Organization is not authenticated" }};
+        }
+    }
+
+    async saveAuthData (organizationId, accessToken) {
+        const tokenOrganization = new TokenOrg({
+            organizationId,
+            accessToken
+        });
+
+        try {
+            const token = await tokenOrganization.save();
+            if(!token) {
+                throw token;
+            }
+            return token.accessToken;
+        } catch (err) {
+            return  { error: { message: "Error while saving token" }};
+        }
+    }
+
+    async deleteAuthData (organizationId) {
+        try {
+            await TokenOrg.findOneAndDelete({ organizationId });
+        } catch (err) {
+            return  { error: { message: "Error while deleting token" }};
+        }
+    }
+
+
+    async validateRewardAndGetUser (accessToken, organizationId, rewardBody) {
         
         try {
             const organization = await Organization.findById(organizationId);
@@ -68,6 +107,15 @@ class OrganizationValidation {
             }
         } catch {
             return { error: { message: "Organization not found" }};
+        }
+
+        try {
+            const token = await this.isAuthenticated(accessToken);
+            if (!(token instanceof TokenOrg)) {
+                throw token;
+            }
+        } catch (err) {
+            return err;
         }
 
         const { userId, reward } =  rewardBody;

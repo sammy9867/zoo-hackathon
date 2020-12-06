@@ -14,14 +14,14 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// router.post('/logout', async (req, res) => {
-//     try {
-//         const token = await OrganizationServiceInstance.logout(req.body);
-//         res.header('auth-token', token).send(token);
-//     } catch (err) {
-//         res.status(500).send(err);
-//     }
-// });
+router.post('/logout', auth, async (req, res) => {
+    try {
+        await OrganizationServiceInstance.logoutOrganization(req.organizationId._id);
+        res.send("Logged Out");
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
 
 router.post('/register', async (req, res) => {
     try {
@@ -34,7 +34,7 @@ router.post('/register', async (req, res) => {
 
 router.post('/reward', auth, async (req, res) => {
     try {
-        const savedRewards = await OrganizationServiceInstance.sendRewardsToUser(req.organizationId._id, req.body);
+        const savedRewards = await OrganizationServiceInstance.sendRewardsToUser(req.get("auth-token"), req.organizationId._id, req.body);
         res.json(savedRewards)
     } catch (err) {
         res.status(500).send(err);

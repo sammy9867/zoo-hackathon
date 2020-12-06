@@ -17,14 +17,14 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// router.post('/logout', async (req, res) => {
-//     try {
-//         const token = await UserServiceInstance.logout(req.body);
-//         res.header('auth-token', token).send(token);
-//     } catch (err) {
-//         res.status(500).send(err);
-//     }
-// });
+router.post('/logout', auth, async (req, res) => {
+    try {
+        await UserServiceInstance.logoutUser(req.userId._id);
+        res.send("Logged Out");
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
 
 router.post('/register', async (req, res) => {
     try {
@@ -40,7 +40,7 @@ router.post('/donate', auth, async (req, res) => {
     // Donate to NonProfit
     let savedDonations;
     try {
-        savedDonations = await UserServiceInstance.donateToNonProfit(req.userId._id, req.body);
+        savedDonations = await UserServiceInstance.donateToNonProfit(req.get("auth-token"), req.userId._id, req.body);
         if (!savedDonations.nonProfitId || !savedDonations.donations) {
             return res.status(500).json(savedDonations);
         }

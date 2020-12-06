@@ -12,17 +12,20 @@ class OrganizationService {
     async getOrganizationById (id) {
         try {
             const organization = await Organization.findById(id);
+            if(!organization) {
+                throw organization;
+            } 
             return organization;
         } catch (err) {
             return err;
         }
     }
 
-    async sendRewardsToUser (organizationId, rewardBody) {
+    async sendRewardsToUser (accessToken, organizationId, rewardBody) {
         // Check if the user has enough rewards
         let user;
         try {
-            user = await OrganizationValidationInstance.validateRewardAndGetUser(organizationId, rewardBody);
+            user = await OrganizationValidationInstance.validateRewardAndGetUser(accessToken, organizationId, rewardBody);
             if (!(user instanceof User)) {
                 throw user;
             }
@@ -72,9 +75,30 @@ class OrganizationService {
             return { error: { code: 400, details: { message: "Invalid password"} }};
         }
 
-        const token = jwt.sign({_id: organization._id}, process.env.TOKEN_SECRET);
-        return token;
+        // Save access token
+        try {
+            const token = OrganizationValidationInstance.saveAuthData(organization._id.toString(), jwt.sign({_id: organization._id}, process.env.TOKEN_SECRET));
+            return token;
+        } catch (err) {
+            return err;
+        }
     }
+    
+    async logoutOrganization (organizationId) {
+        // Check if organization exists
+        try {
+            await this.getOrganizationById(organizationId);
+        } catch (err) {
+            return err;
+        }
+    
+        // Delete access token
+        try {
+            await OrganizationValidationInstance.deleteAuthData(organizationId);
+        } catch (err) {
+            return err;
+        }
+    } 
 
     async registerOrganization (organizationBody) {
         let errors;

@@ -22,9 +22,8 @@ class ReportService {
         }
     }
 
-    async addReport (userId, reportBody) {
-        let errors;
-        errors = await ReportValidationInstance.validateReport(userId, reportBody);
+    async addReport (accessToken, userId, reportBody) {
+        const errors = await ReportValidationInstance.validateReport(accessToken, userId, reportBody);
         if(errors.length > 0) {
             return { error: { code: 400, details: errors }};
         }

@@ -11,17 +11,20 @@ class UserService {
     async getUserById (id) {
         try {
             const user = await User.findById(id);
+            if (!user) {
+                throw user;
+            }
             return user;
         } catch (err) {
             return err;
         }
     }
 
-    async donateToNonProfit (userId, donateBody) {
+    async donateToNonProfit (accessToken, userId, donateBody) {
         // Check if the user has enough rewards
         let user;
         try {
-            user = await UserValidationInstance.donationValidation(userId, donateBody);
+            user = await UserValidationInstance.donationValidation(accessToken, userId, donateBody);
             if (!(user instanceof User)) {
                 throw user;
             }
@@ -71,9 +74,30 @@ class UserService {
             return { error: { code: 400, details: { message: "Invalid password"} }};
         }
 
-        const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-        return token;
+        // Save access token
+        try {
+            const token = UserValidationInstance.saveAuthData(user._id.toString(), jwt.sign({_id: user._id}, process.env.TOKEN_SECRET));
+            return token;
+        } catch (err) {
+            return err;
+        }
     }
+
+    async logoutUser (userId) {
+        // Check if user exists
+        try {
+            await this.getUserById(userId);
+        } catch (err) {
+            return err;
+        }
+
+        // Delete access token
+        try {
+            await UserValidationInstance.deleteAuthData(userId);
+        } catch (err) {
+            return err;
+        }
+    } 
 
     async registerUser (userBody) {
         let errors;
