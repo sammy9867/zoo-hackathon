@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../config/auth');
+const auth = require('../config/auth-user');
 
 const UserService = require('../services/user');
 const UserServiceInstance = new UserService();
@@ -40,7 +40,7 @@ router.post('/donate', auth, async (req, res) => {
     // Donate to NonProfit
     let savedDonations;
     try {
-        savedDonations = await UserServiceInstance.donateToNonProfit(req.userId, req.body);
+        savedDonations = await UserServiceInstance.donateToNonProfit(req.userId._id, req.body);
         if (!savedDonations.nonProfitId || !savedDonations.donations) {
             return res.status(500).json(savedDonations);
         }

@@ -7,7 +7,10 @@ class ReportValidation {
         const { forestId, location, certainty } = reportBody;
 
         try {
-            await User.findById(userId);
+            const user = await User.findById(userId);
+            if (!user) {
+                throw user;
+            }
         } catch (err) {
             errors.push({ message: "User not found" });
         }

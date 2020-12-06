@@ -2,7 +2,7 @@ const User = require('../models/user');
 const UserValidation = require('../validations/user');
 const UserValidationInstance = new UserValidation();
 
-const Donations = require('../models/donations');
+const Donation = require('../models/donation');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -21,8 +21,8 @@ class UserService {
         // Check if the user has enough rewards
         let user;
         try {
-            user = await UserValidationInstance.hasEnoughRewards(userId, donateBody);
-            if (!user.rewards) {
+            user = await UserValidationInstance.donationValidation(userId, donateBody);
+            if (!(user instanceof User)) {
                 throw user;
             }
         } catch (e) {
@@ -37,7 +37,7 @@ class UserService {
             return { error: { message: `Unknown Server Error`}};
         }
 
-        const donation = new Donations({
+        const donation = new Donation({
             userId,
             nonProfitId: donateBody.nonProfitId,
             donations: donateBody.donations

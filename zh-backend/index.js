@@ -21,11 +21,13 @@ mongoose
 
 /** API endpoints **/
 const user = require("./api/user");
+const organization = require("./api/organization");
 const forest = require("./api/forest");
 const report = require("./api/report");
 const non_profit = require("./api/non-profit");
 
 app.use("/users", user);
+app.use("/organizations", organization);
 app.use("/forests", forest);
 app.use("/reports", report);
 app.use("/non-profits", non_profit);

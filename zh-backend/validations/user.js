@@ -1,5 +1,7 @@
 const User = require('../models/user');
+const NonProfit = require('../models/non-profit');
 const bcrypt = require('bcryptjs');
+const nonProfit = require('../models/non-profit');
 
 class UserValidation {
 
@@ -63,17 +65,37 @@ class UserValidation {
         return true;
     }
 
-    async hasEnoughRewards(userId, donateBody) {
+    async donationValidation(userId, donateBody) {
+
+        let user;
         try {
-            const user = await User.findById(userId);     
-            if (user.rewards < donateBody.donations) {
-                return { error: { message: `User ${user.userName} doesn't have enough rewards`}}
+            user = await User.findById(userId);
+            if(!user) {
+                throw user;
             }
-            return user;
         } catch (err) {
-            return err;
+            return  { error: { message: "User not found" }};
         }
+
+        const { nonProfitId, donations } = donateBody;
+
+        if(!nonProfitId || !donations) {
+            return  { error: { message: "NonProfitId or donations not found" }};
+        }
+
+        if (user.rewards === 0 || user.rewards < donateBody.donations) {
+            return { error: { message: `User ${user.userName} doesn't have enough rewards` }};
+        }
+
+        try {
+            await NonProfit.findById(nonProfitId);
+        } catch {
+            return  { error: { message: "NonProfit not found" }};
+        }
+
+        return user;
     }
+
 }
 
 module.exports = UserValidation;
