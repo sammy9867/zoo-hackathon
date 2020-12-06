@@ -2,9 +2,27 @@ const Report = require('../models/report');
 const ReportValidation = require('../validations/report');
 const ReportValidationInstance = new ReportValidation();
 
+const UserValidation = require('../validations/user');
+const UserValidationInstance = new UserValidation();
+
+const OrganizationValidation = require('../validations/organization');
+const OrganizationValidationInstance = new OrganizationValidation();
+
+const TokenUser = require('../models/token-user');
+const TokenOrganization = require('../models/token-org');
+
 class ReportService {
 
-    async getReports () {
+    async getReports (accessToken) {
+        try {
+            const token = await OrganizationValidationInstance.isAuthenticated(accessToken);
+            if (!(token instanceof TokenOrganization)) {
+                throw token;
+            }
+        } catch (err) {
+            return err;
+        }
+
         try {
             const reports = await Report.find();
             return reports;
@@ -13,9 +31,36 @@ class ReportService {
         }
     }
 
-    async getReportById (id) {
+    async getReportById (accessToken, reportId) {
         try {
-            const report = await Report.findById(id);
+            const token = await OrganizationValidationInstance.isAuthenticated(accessToken);
+            if (!(token instanceof TokenOrganization)) {
+                throw token;
+            }
+        } catch (err) {
+            return err;
+        }
+
+        try {
+            const report = await Report.findById(reportId);
+            return report;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    async getReportsByUserId (accessToken, userId) {
+        try {
+            const token = await UserValidationInstance.isAuthenticated(accessToken);
+            if (!(token instanceof TokenUser)) {
+                throw token;
+            }
+        } catch (err) {
+            return err;
+        }
+
+        try {
+            const report = await Report.find({ userId });
             return report;
         } catch (err) {
             return err;

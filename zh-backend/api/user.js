@@ -5,8 +5,38 @@ const auth = require('../config/auth-user');
 const UserService = require('../services/user');
 const UserServiceInstance = new UserService();
 
+const ReportService = require('../services/report');
+const ReportServiceInstance = new ReportService();
+
 const NonProfitService = require('../services/non-profit');
 const NonProfitServiceInstance = new NonProfitService();
+
+router.get('/:userId/reports', auth, async (req, res) => { 
+    try {
+        const report = await ReportServiceInstance.getReportsByUserId(req.get("auth-token"), req.params.userId);
+        res.json(report);
+    } catch(err) {
+        res.status(500).send(err);
+    }
+});
+
+router.get('/:userId/donations', auth, async (req, res) => { 
+    try {
+        const donations = await UserServiceInstance.getDonationsByUserId(req.get("auth-token"), req.params.userId);
+        res.json(donations);
+    } catch(err) {
+        res.status(500).send(err);
+    }
+});
+
+router.get('/:userId/rewards', auth, async (req, res) => { 
+    try {
+        const rewards = await UserServiceInstance.getRewardsByUserId(req.get("auth-token"), req.params.userId);
+        res.json(rewards);
+    } catch(err) {
+        res.status(500).send(err);
+    }
+});
 
 router.post('/login', async (req, res) => {
     try {
@@ -34,7 +64,6 @@ router.post('/register', async (req, res) => {
         res.status(500).send(err);
     }
 });
-
 
 router.post('/donate', auth, async (req, res) => {
     // Donate to NonProfit

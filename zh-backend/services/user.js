@@ -1,8 +1,10 @@
 const User = require('../models/user');
 const UserValidation = require('../validations/user');
 const UserValidationInstance = new UserValidation();
+const TokenUser = require('../models/token-user');
 
 const Donation = require('../models/donation');
+const Reward = require('../models/reward');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -11,6 +13,48 @@ class UserService {
     async getUserById (id) {
         try {
             const user = await User.findById(id);
+            if (!user) {
+                throw user;
+            }
+            return user;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    async getDonationsByUserId (accessToken, userId) {
+        try {
+            const token = await UserValidationInstance.isAuthenticated(accessToken);
+            if (!(token instanceof TokenUser)) {
+                throw token;
+            }
+        } catch (err) {
+            return err;
+        }
+
+        try {
+            const user = await Donation.find({ userId });
+            if (!user) {
+                throw user;
+            }
+            return user;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    async getRewardsByUserId (accessToken, userId) {
+        try {
+            const token = await UserValidationInstance.isAuthenticated(accessToken);
+            if (!(token instanceof TokenUser)) {
+                throw token;
+            }
+        } catch (err) {
+            return err;
+        }
+
+        try {
+            const user = await Reward.find({ userId });
             if (!user) {
                 throw user;
             }
