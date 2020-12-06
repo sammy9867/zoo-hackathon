@@ -1,13 +1,51 @@
 const User = require('../models/user');
+const UserValidation = require('../validations/user');
+const UserValidationInstance = new UserValidation();
+
+const Donations = require('../models/donations');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 class UserService {
 
-    async getUsers () {
+    async getUserById (id) {
         try {
-            const users = await User.find();
-            return users;
+            const user = await User.findById(id);
+            return user;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    async donateToNonProfit (userId, donateBody) {
+        // Check if the user has enough rewards
+        let user;
+        try {
+            user = await UserValidationInstance.hasEnoughRewards(userId, donateBody);
+            if (!user.rewards) {
+                throw user;
+            }
+        } catch (e) {
+            return e;
+        }
+       
+        // Deduct user rewards
+        try {
+            const deductedRewards = user.rewards - donateBody.donations;
+            await User.findByIdAndUpdate(userId, { rewards: deductedRewards }, { new: true });
+        } catch (err) {
+            return { error: { message: `Unknown Server Error`}};
+        }
+
+        const donation = new Donations({
+            userId,
+            nonProfitId: donateBody.nonProfitId,
+            donations: donateBody.donations
+        });
+
+        try {
+            const savedDonation = await donation.save();
+            return savedDonation;
         } catch (err) {
             return err;
         }
@@ -16,7 +54,7 @@ class UserService {
     async loginUser (userBody) {
         let errors;
         // Validate the user
-        errors = this.loginValidation(userBody);
+        errors = UserValidationInstance.loginValidation(userBody);
         if (errors.length > 0) {
             return { error: { code: 400, details: errors }};
         }
@@ -28,7 +66,7 @@ class UserService {
         }
 
         // Compare given password with hash
-        const validPassword = await this.isValidPassword(userBody.password, user.password);
+        const validPassword = await UserValidationInstance.isValidPassword(userBody.password, user.password);
         if (!validPassword) {
             return { error: { code: 400, details: { message: "Invalid password"} }};
         }
@@ -40,13 +78,13 @@ class UserService {
     async registerUser (userBody) {
         let errors;
         // Validate the user
-        errors = this.registerValidation(userBody);
+        errors = UserValidationInstance.registerValidation(userBody);
         if (errors.length > 0) {
             return { error: { code: 400, details: errors }};
         }
 
         // Check if the user already exists
-        errors = await this.isAlreadyRegistered(userBody.userName, userBody.email);
+        errors = await UserValidationInstance.isAlreadyRegistered(userBody.userName, userBody.email);
         if (errors.length > 0) {
             return { error: { code: 400, details: errors }};
         }
@@ -69,66 +107,6 @@ class UserService {
         } catch (err) {
             return err;
         }
-    }
-
-    loginValidation (userBody) {
-        const { email, password } = userBody;
-
-        let errors = [];
-        
-        if (!email || !password) {
-            errors.push({ message: 'Please fill in all the fields.'});
-        }
-
-        if (password.length <  6) {
-            errors.push({message: 'Password should be atleast 6 characters'});
-        }
-
-        return errors;
-    }
-
-    registerValidation (userBody) {
-        const { userName, email, password, passwordAgain, firstName, lastName } = userBody;
-
-        let errors = [];
-        
-        if (!userName || !email || !password || !passwordAgain || !firstName || !lastName) {
-            errors.push({ message: 'Please fill in all the fields.'});
-        }
-
-        if (password !== passwordAgain) {
-            errors.push({ message: 'Passwords do not match.'});
-        }
-
-        if (password.length <  6) {
-            errors.push({message: 'Password should be atleast 6 characters'});
-        }
-
-        return errors;
-    }
-
-    async isAlreadyRegistered (userName, email) {
-        let errors = [];
-
-        const userNameExist = await User.findOne({ userName });
-        if (userNameExist) {
-            errors.push({message: "Username already exists."});
-        }
-
-        const emailExist = await User.findOne({ email });
-        if (emailExist) { 
-            errors.push({message: "Email already exists."});
-        }
-
-        return errors;
-    }
-
-    async isValidPassword (password, hashedPassword) {
-        const validPassword = await bcrypt.compare(password, hashedPassword);
-        if (!validPassword) {
-            return false;
-        }
-        return true;
     }
 }
 

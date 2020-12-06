@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
 
-    totalRewards: {
+    rewards: {
         type: Number,
         default: 0
     }

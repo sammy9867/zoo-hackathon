@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 const db = require("./config/mongodb").URI;
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
+mongoose.set('useFindAndModify', false);
 mongoose
   .connect(db)
   .then(() => console.log("MongoDB connected"))
@@ -22,10 +23,12 @@ mongoose
 const user = require("./api/user");
 const forest = require("./api/forest");
 const report = require("./api/report");
+const non_profit = require("./api/non-profit");
 
 app.use("/users", user);
 app.use("/forests", forest);
 app.use("/reports", report);
+app.use("/non-profits", non_profit);
 
 /** Port **/
 const port = process.env.PORT || 5000;

@@ -25,7 +25,7 @@ router.get('/:reportId', async (req, res) => {
 
 router.post('/', auth, async (req, res) => {
     try {
-        const report = await ReportServiceInstance.addReport(req.body);
+        const report = await ReportServiceInstance.addReport(req.userId, req.body);
         res.json(report);
     } catch(err) {
         res.status(500).send(err);
