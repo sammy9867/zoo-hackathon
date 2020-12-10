@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { GOOGLE_MAPS_API_KEY } from '../../util/constants';
+import { GOOGLE_MAPS_API_KEY } from '../../utils/constants';
 import axios from 'axios';
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import { formatRelative } from "date-fns";

@@ -1,12 +1,12 @@
-import React from 'react';  
+import React from 'react';
+import { NonProfitList } from '../../components';
 import './Donate.css';
 
 export const Donate = () => {
 
     return (
         <div className="donate">
-            <h2 className="theme">Donation.</h2>
+            <NonProfitList />
         </div>
     );
-
 }
