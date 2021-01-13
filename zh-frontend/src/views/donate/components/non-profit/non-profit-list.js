@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { NonProfit } from './NonProfit';
-import axiosInstance from '../../utils/axios';
+import { NonProfit } from './non-profit';
+import { useAuthValue } from '../../../../context';
+import axiosInstance from '../../../../utils/axios';
+import './style.css';
 
 export const NonProfitList = () => {
 
@@ -8,12 +10,18 @@ export const NonProfitList = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
+    const { token } = useAuthValue();
+
+    const header = {
+        headers: {'auth-token': token }
+    };
+
     useEffect(() => {
         const fetchNonProfits = async () => {
             setIsLoading(true);
             setIsError(false);
 
-            await axiosInstance.get('/non-profits')
+            await axiosInstance.get('/non-profits', header)
             .then(response => {
                 console.log("res", response.data)
                 setNonProfits(response.data);
@@ -30,7 +38,7 @@ export const NonProfitList = () => {
     }, []);
     
     return (
-        <div className="non-profits">
+        <>
             {isLoading ? 
                 ( <div>Loading ...</div> ) :
                 ( <ul className="non-profit-ul">
@@ -47,6 +55,6 @@ export const NonProfitList = () => {
                     </ul> 
                 )
             }
-        </div>
+        </>
     );
 }

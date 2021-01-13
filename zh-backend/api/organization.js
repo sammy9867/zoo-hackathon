@@ -5,6 +5,24 @@ const auth = require('../config/auth-org');
 const OrganizationService = require('../services/organization');
 const OrganizationServiceInstance = new OrganizationService();
 
+router.get('/:organizationId', async (req, res) => {
+    try {
+        const organization = await OrganizationServiceInstance.getOrganizationById(req.params.organizationId);
+        res.json(organization);
+    } catch(err) {
+        res.status(500).send(err);
+    }
+});
+
+router.post('/reward', auth, async (req, res) => {
+    try {
+        const savedRewards = await OrganizationServiceInstance.sendRewardsToUser(req.get("auth-token"), req.organizationId._id, req.body);
+        res.json(savedRewards)
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
 router.post('/login', async (req, res) => {
     try {
         const token = await OrganizationServiceInstance.loginOrganization(req.body);
@@ -27,15 +45,6 @@ router.post('/register', async (req, res) => {
     try {
         const organization = await OrganizationServiceInstance.registerOrganization(req.body);
         res.json(organization);
-    } catch (err) {
-        res.status(500).send(err);
-    }
-});
-
-router.post('/reward', auth, async (req, res) => {
-    try {
-        const savedRewards = await OrganizationServiceInstance.sendRewardsToUser(req.get("auth-token"), req.organizationId._id, req.body);
-        res.json(savedRewards)
     } catch (err) {
         res.status(500).send(err);
     }

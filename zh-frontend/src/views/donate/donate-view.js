@@ -1,8 +1,8 @@
 import React from 'react';
-import { NonProfitList } from '../../components';
-import './Donate.css';
+import { NonProfitList } from './components';
+import './style.css';
 
-export const Donate = () => {
+export const DonateView = () => {
 
     return (
         <div className="donate">

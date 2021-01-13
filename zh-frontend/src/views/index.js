@@ -1,13 +1,13 @@
-import { Home } from './home/Home';
-import { Donate } from './donate/Donate';
-import { Login } from './login/Login';
-import { Game } from './game/Game';
-import { Error } from './error/Error';
+import { HomeView } from './home/home-view';
+import { GameView } from './game/game-view';
+import { DonateView } from './donate/donate-view';
+import { LoginView } from './login/login-view';
+import { ErrorView } from './error/error-view';
 
 export {
-    Home,
-    Donate,
-    Login,
-    Game,
-    Error
+    HomeView,
+    GameView,
+    DonateView,
+    LoginView,
+    ErrorView
 }

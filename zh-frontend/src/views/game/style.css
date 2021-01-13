@@ -1,0 +1,44 @@
+.game {
+    width: 100vw;
+    max-width: 100%;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 70% 30%;
+}
+
+.game-map-container {
+    width: 95%;
+    height: 95%;
+    margin-top: 2%;
+    margin-left: 2%;
+    display: grid;
+    grid-template-rows: 8% 92%;
+    background-color: #F6F8FE;
+    border-radius: 25px;
+    overflow: hidden;
+
+}
+
+.forest-selection {
+    display: flex;
+    justify-content: space-between;
+}
+
+.map-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+.feed-container {
+    /* position: absolute;
+    right: 0;
+    top: 0; */
+}
+
+.forest-ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

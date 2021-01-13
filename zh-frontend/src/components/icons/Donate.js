@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Donate = () => {
+export const DonateIcon = () => {
     return (
         <>
         <svg width="81" height="81" viewBox="0 0 81 81" fill="none" xmlns="http://www.w3.org/2000/svg">

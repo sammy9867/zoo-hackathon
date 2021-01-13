@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import axiosInstance from '../../utils/axios';
-import { useAuthValue } from '../../context';
-import './LoginForm.css';
+import axiosInstance from '../../../../utils/axios';
+import { useAuthValue } from '../../../../context';
+import {
+    Redirect,
+  } from 'react-router-dom'
+import './style.css';
 
 export const LoginForm = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const { setToken } = useAuthValue();
+    const { token, setToken } = useAuthValue();
+    const [redirect, setRedirect] = useState(token ? true : false)
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -18,13 +22,20 @@ export const LoginForm = () => {
         })
         .then(result => {
             setToken(result.data);
+            setRedirect(true);
+            console.log(token)
+            
         })
         .catch(e => {
             console.log("err", e);
+            setRedirect(false);
         })
     }
 
     return (
+        redirect ? 
+        <Redirect to='/forest' />
+        : 
         <form onSubmit={handleLogin}>
             <div className="field">
                 <input type="email"  className="input" placeholder=" " autoComplete="off"  onChange={(e) => setEmail(e.target.value)}/>

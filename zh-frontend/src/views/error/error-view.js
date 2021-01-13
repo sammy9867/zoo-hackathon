@@ -1,7 +1,7 @@
 import React from 'react';  
-import './Error.css';
+import './style.css';
 
-export const Error = () => {
+export const ErrorView = () => {
 
     return (
         <div className="error">

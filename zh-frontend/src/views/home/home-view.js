@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Monitor, Report, Donate, Tree } from '../../components';
-import "./Home.css";
+import { MonitorIcon, ReportIcon, DonateIcon } from '../../components';
+import "./style.css";
 
-export const Home = () => {
+export const HomeView = () => {
 
     return (
         <div className="home">
@@ -18,19 +18,19 @@ export const Home = () => {
                     <ul className="icons-ul">
                         <li className="icons-li">
                             <div>
-                                <span> <Monitor /> </span>
+                                <span> <MonitorIcon /> </span>
                                 <p>Monitor <br/> satellite <br/> images</p>
                             </div>  
                         </li>
                         <li className="icons-li">
                             <div>
-                                <span> <Report /> </span>
+                                <span> <ReportIcon /> </span>
                                 <p>Report  <br/> suspected <br/> illegal logging</p>
                              </div>
                         </li>
                         <li className="icons-li">
                             <div>
-                                <span> <Donate /> </span>
+                                <span> <DonateIcon /> </span>
                                 <p>Donate to <br/> charity from <br/> points earned</p>
                              </div>
                         </li>
@@ -39,11 +39,11 @@ export const Home = () => {
             </section>
 
             <section className="second">
-                <img src={process.env.PUBLIC_URL + '/images/forest-spy.png'} />
-                 <article className="mission"> 
-                    <h2>Our Mission</h2>
-                    <p>To report on suspected illegal logging through satellite imagery.</p>
-                </article>
+                    <img src={process.env.PUBLIC_URL + '/images/forest-spy.png'}  alt="Mission"/>
+                    <article className="mission"> 
+                        <h2>Our Mission</h2>
+                        <p>To report on suspected illegal logging through satellite imagery.</p>
+                    </article>
             </section>
 
             <section className="third">
@@ -64,7 +64,8 @@ export const Home = () => {
                         </li>
                     </ul>
                 </article>
-            </section>
+            </section> 
         </div>
-    );
+    );  
+  
 }

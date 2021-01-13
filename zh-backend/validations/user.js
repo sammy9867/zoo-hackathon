@@ -1,7 +1,8 @@
+const bcrypt = require('bcryptjs');
+
 const User = require('../models/user');
 const TokenUser = require('../models/token-user');
 const NonProfit = require('../models/non-profit');
-const bcrypt = require('bcryptjs');
 
 class UserValidation {
 
@@ -132,13 +133,14 @@ class UserValidation {
             return { error: { message: `User ${user.userName} doesn't have enough rewards` }};
         }
 
+        let nonProfit;
         try {
-            await NonProfit.findById(nonProfitId);
+            nonProfit = await NonProfit.findById(nonProfitId);
         } catch {
             return  { error: { message: "NonProfit not found" }};
         }
 
-        return user;
+        return { user, nonProfitName: nonProfit.name };
     }
 
 }

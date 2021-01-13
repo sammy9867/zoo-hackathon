@@ -1,30 +1,22 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../config/auth-user');
 
 const ForestService = require('../services/forest');
 const ForestServiceInstance = new ForestService();
 
 router.get('/', async (req, res) => {
     try {
-        const forests = await ForestServiceInstance.getForests();
+        const forests = await ForestServiceInstance.getForests(req.get("auth-token"));
         res.json(forests);
     } catch(err) {
         res.status(500).send(err);
     }
 });
 
-router.get('/:forestId', async (req, res) => { 
+router.get('/:forestId/random-location', auth, async (req, res) => {
     try {
-        const forest = await ForestServiceInstance.getForestById(req.params.forestId);
-        res.json(forest);
-    } catch(err) {
-        res.status(500).send(err);
-    }
-});
-
-router.get('/:forestId/random-location', async (req, res) => {
-    try {
-        const location = await ForestServiceInstance.getRandomLocationByForestId(req.params.forestId);
+        const location = await ForestServiceInstance.getRandomLocationByForestId(req.get("auth-token"), req.params.forestId);
         res.json(location);
     } catch(err) {
         res.status(500).send(err);

@@ -1,23 +1,52 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 const User = require('../models/user');
 const UserValidation = require('../validations/user');
 const UserValidationInstance = new UserValidation();
 const TokenUser = require('../models/token-user');
-
+const UserFeed = require('../models/user-feed');
+const Report = require('../models/report');
 const Donation = require('../models/donation');
 const Reward = require('../models/reward');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
 class UserService {
 
-    async getUserById (id) {
+    async getRecentFeedByUserId(accessToken, userId, pageNumber) {
         try {
-            const user = await User.findById(id);
-            if (!user) {
-                throw user;
+            const token = await UserValidationInstance.isAuthenticated(accessToken);
+            if (!(token instanceof TokenUser)) {
+                throw token;
             }
-            return user;
         } catch (err) {
+            return err;
+        }
+
+        try {
+            const userFeeds = await UserFeed.find({ userId })
+                                        .sort({ createdAt: -1 })
+                                        .skip((pageNumber - 1)*10)
+                                        .limit(10);
+            return userFeeds;
+        } catch (err) { 
+            return err;
+        }
+    }
+
+    async getReportsByUserId (accessToken, userId) {
+        try {
+            const token = await UserValidationInstance.isAuthenticated(accessToken);
+            if (!(token instanceof TokenUser)) {
+                throw token;
+            }
+        } catch (err) {
+            return err;
+        }
+
+        try {
+            const reports = await Report.find({ userId });
+            return reports;
+        } catch (err) { 
             return err;
         }
     }
@@ -31,13 +60,13 @@ class UserService {
         } catch (err) {
             return err;
         }
-
+        
         try {
-            const user = await Donation.find({ userId });
-            if (!user) {
-                throw user;
+            const donations = await Donation.find({ userId });
+            if (!donations) {
+                throw donations;
             }
-            return user;
+            return donations;
         } catch (err) {
             return err;
         }
@@ -54,11 +83,11 @@ class UserService {
         }
 
         try {
-            const user = await Reward.find({ userId });
-            if (!user) {
-                throw user;
+            const rewards = await Reward.find({ userId });
+            if (!rewards) {
+                throw rewards;
             }
-            return user;
+            return rewards;
         } catch (err) {
             return err;
         }
@@ -66,11 +95,13 @@ class UserService {
 
     async donateToNonProfit (accessToken, userId, donateBody) {
         // Check if the user has enough rewards
-        let user;
+        let user, nonProfitName;
         try {
-            user = await UserValidationInstance.donationValidation(accessToken, userId, donateBody);
+            let res = await UserValidationInstance.donationValidation(accessToken, userId, donateBody);
+            user = res.user
+            nonProfitName = res.nonProfitName
             if (!(user instanceof User)) {
-                throw user;
+                throw res;
             }
         } catch (e) {
             return e;
@@ -90,8 +121,17 @@ class UserService {
             donations: donateBody.donations
         });
 
+
+        const userFeed = new UserFeed({
+            userId,
+            description: `You donated $${donateBody.donations} to ${nonProfitName}.`,
+            donation: true
+        })
+
         try {
             const savedDonation = await donation.save();
+            await userFeed.save()
+
             return savedDonation;
         } catch (err) {
             return err;
@@ -172,6 +212,18 @@ class UserService {
         try {
             const registerdUser = await user.save();
             return registerdUser;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    async getUserById (id) {
+        try {
+            const user = await User.findById(id);
+            if (!user) {
+                throw user;
+            }
+            return user;
         } catch (err) {
             return err;
         }

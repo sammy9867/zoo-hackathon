@@ -1,4 +1,7 @@
 const Forest = require('../models/forest');
+const UserValidation = require('../validations/user');
+const UserValidationInstance = new UserValidation();
+const TokenUser = require('../models/token-user');
 
 class ForestService {
 
@@ -20,7 +23,16 @@ class ForestService {
         }
     }
 
-    async getRandomLocationByForestId (id) {
+    async getRandomLocationByForestId (accessToken, id) {
+        try {
+            const token = await UserValidationInstance.isAuthenticated(accessToken);
+            if (!(token instanceof TokenUser)) {
+                throw token;
+            }
+        } catch (err) {
+            return err;
+        }
+
         const forest = await this.getForestById(id);
         const bounds = this.getPolygonBoundingBox(forest.coordinates);
 

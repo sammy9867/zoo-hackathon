@@ -100,8 +100,9 @@ class OrganizationValidation {
 
     async validateRewardAndGetUser (accessToken, organizationId, rewardBody) {
         
+        let organization;
         try {
-            const organization = await Organization.findById(organizationId);
+            organization = await Organization.findById(organizationId);
             if(!organization) {
                 throw organization;
             }
@@ -133,7 +134,7 @@ class OrganizationValidation {
             if(!user) {
                 throw user;
             }
-            return user;
+            return { user, organizationName: organization.name };
         } catch {
             return { error: { message: "User not found" }};
         }

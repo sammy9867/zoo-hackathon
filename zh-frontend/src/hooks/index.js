@@ -1,12 +1,12 @@
-import {
-    useMarker
-} from './useMarker';
+import { useForest } from './useForest';
+import { useRandomLocation } from './useRandomLocation';
+import { useReport } from './useReport';
+import { useFeed } from './useFeed';
 
-import {
-    useRandomLocation
-} from './useRandomLocation';
 
 export {
-    useMarker,
-    useRandomLocation
+    useForest,
+    useRandomLocation,
+    useReport,
+    useFeed
 }

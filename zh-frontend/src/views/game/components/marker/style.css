@@ -1,0 +1,7 @@
+.report-location-marker {
+    transition: 0.3s linear;
+}
+.report-location-marker:hover {
+    cursor: pointer;
+    transform: scale(1.5);
+}

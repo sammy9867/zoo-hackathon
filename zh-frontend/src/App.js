@@ -4,11 +4,13 @@ import {
   Switch,
   Route
 } from 'react-router-dom';
-import { Header} from './components';
-import { Home, Donate, Login, Game, Error } from './views';
-import { AuthContextProvider } from './context';
-
+import { PrivateRoute } from './routes'
+import { Header } from './components';
+import { HomeView, GameView, DonateView, LoginView, ErrorView } from './views';
+import { AuthContextProvider, ForestContextProvider } from './context';
+import { ToastContainer } from 'react-toastify';
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const App = () => {
 
@@ -16,15 +18,25 @@ export const App = () => {
     <div className="App">
       <Router>
         <AuthContextProvider>
-          <Header />
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/game" component={Game} />
-            <Route exact path="/donate" component={Donate} />
-            <Route path="*" component={Error} />
-          </Switch>
-          </AuthContextProvider>
+          <ForestContextProvider>
+            {/* <Header /> */}
+            <ToastContainer
+                autoClose={2000}
+                position="top-right"
+                className="toast-container"
+                closeOnClick={true}
+                pauseOnHover= {false}
+                draggable={false}
+              />
+            <Switch>
+              <Route exact path="/" component={HomeView} />
+              <PrivateRoute exact path="/game" component={GameView} />
+              <PrivateRoute exact path="/donate" component={DonateView} />
+              <Route exact path="/login" component={LoginView} />
+              <Route path="*" component={ErrorView} />
+            </Switch>
+          </ForestContextProvider>
+        </AuthContextProvider>
       </Router>
     </div>
   );

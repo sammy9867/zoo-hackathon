@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Logo } from '../icons/Logo';
-import './Header.css';
+import { LogoIcon } from '../icons/logo';
+import './style.css';
 
 export const Header = () => {
     return (
         <header className="header">
             <span className="logo flex">
                 <Link to="/">
-                    <Logo />
+                    <LogoIcon />
                 </Link>
             </span>
             <nav className="navbar">

@@ -1,19 +1,13 @@
-import { Header } from './header/Header';
-import { Logo } from './icons/Logo';
-import { Monitor } from './icons/Monitor';
-import { Report } from './icons/Report';
-import { Donate } from './icons/Donate';
-import { Tree } from './icons/Tree';
-import { LoginForm } from './login-form/LoginForm';
-import { NonProfitList } from './non-profit/NonProfitList';
+import { Header } from './header/header';
+import { LogoIcon } from './icons/logo';
+import { MonitorIcon } from './icons/monitor';
+import { ReportIcon } from './icons/report';
+import { DonateIcon } from './icons/donate';
 
 export {
     Header,
-    Logo, 
-    Monitor,
-    Report,
-    Donate,
-    Tree,
-    LoginForm,
-    NonProfitList
+    LogoIcon,
+    MonitorIcon,
+    ReportIcon,
+    DonateIcon
 }

@@ -1,8 +1,8 @@
 import React from 'react';
-import { LoginForm } from '../../components';
-import './Login.css';
+import { LoginForm } from './components';
+import './style.css';
 
-export const Login = () => {
+export const LoginView = () => {
 
     return (
         <div className="login">

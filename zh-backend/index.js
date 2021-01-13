@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 const db = require("./config/mongodb").URI;
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
+// mongoose.set('debug', true);
 mongoose.set('useFindAndModify', false);
 mongoose
   .connect(db)

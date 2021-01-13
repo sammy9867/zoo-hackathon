@@ -2,6 +2,8 @@ const Organization = require('../models/organization');
 const OrganizationValidation = require('../validations/organization');
 const OrganizationValidationInstance = new OrganizationValidation();
 
+
+const UserFeed = require('../models/user-feed');
 const User = require('../models/user');
 const Reward = require('../models/reward');
 const bcrypt = require('bcryptjs');
@@ -23,11 +25,13 @@ class OrganizationService {
 
     async sendRewardsToUser (accessToken, organizationId, rewardBody) {
         // Check if the user has enough rewards
-        let user;
+        let user, organizationName;
         try {
-            user = await OrganizationValidationInstance.validateRewardAndGetUser(accessToken, organizationId, rewardBody);
+            let res = await OrganizationValidationInstance.validateRewardAndGetUser(accessToken, organizationId, rewardBody);
+            user = res.user;
+            organizationName = res.organizationName;
             if (!(user instanceof User)) {
-                throw user;
+                throw res;
             }
         } catch (err) {
             return err;
@@ -47,8 +51,16 @@ class OrganizationService {
             reward: rewardBody.reward
         });
 
+        const userFeed = new UserFeed({
+            userId,
+            description: `You received $${rewardBody.reward} from ${organizationName}.`,
+            reward: true
+        })
+
         try {
             const savedReward = await reward.save();
+            await userFeed.save()
+
             return savedReward;
         } catch (err) {
             return err;
