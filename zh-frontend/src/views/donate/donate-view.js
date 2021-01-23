@@ -6,7 +6,12 @@ export const DonateView = () => {
 
     return (
         <div className="donate">
-            <NonProfitList />
+            <div className="donate-image-container"> 
+                <img src={process.env.PUBLIC_URL + '/images/donate_forest.jpg'}  alt="forest"/>
+            </div>
+            <div className="donate-non-profit-container"> 
+                <NonProfitList />
+            </div>
         </div>
     );
 }

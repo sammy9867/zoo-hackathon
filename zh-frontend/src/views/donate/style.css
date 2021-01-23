@@ -1,5 +1,23 @@
 .donate {
     width: 100vw;
     max-width: 100%;
-    height: calc(100vh - 60px);
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 40% 55%;
+    gap: 10px;
+}
+
+.donate-image-container {
+    width: 100%;
+    height: 100vh;
+}
+
+.donate-image-container img {
+    width: 100%;
+    height: 100%;
+}
+
+.donate-non-profit-container {
+    width: 100%;
+    height: 100%;
 }
